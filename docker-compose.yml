@@ -1,0 +1,29 @@
+# dockerエンジンの対象バージョンに合わせる
+version: '3'
+
+services:
+  backend:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    container_name: ruby-sandbox
+    environment:
+      - 'API_KEY=<Twitterのディベロッパーぺ画面から取得>'
+      - 'API_KEY_SECRET=<Twitterのディベロッパーぺ画面から取得>'
+      - 'BEARER_TOKEN=<Twitterのディベロッパーぺ画面から取得>'
+      - 'CLIENT_ID=<Twitterのディベロッパーぺ画面から取得>'
+      - 'CLIENT_SECRET=<Twitterのディベロッパーぺ画面から取得>'
+    ports:
+      - '8000:8000'
+    working_dir: /src
+    # こいつのおかげでctr+cした際にrails serverを切ってからコンテナを終了してくれる
+    # 137のエラーを解決してくれている
+    # 初回起動時のみだった。
+    stop_signal: SIGINT
+    volumes:
+      - ./src:/src
+    # docker run -iを意味する
+    stdin_open: true
+    # -tを意味する
+    tty: true
+
